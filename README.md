@@ -11,13 +11,18 @@ First, I will pre-process them with a PreProcessing fuction that works in the fo
 
 Similar to Principal component analysis (PCA), Singular Value Decomposition (SVD) is a standard linear dimensionality reduction method. They both linearly combine the features of the original high-dimensional dataset and project them into a lower-dimensional space, ideally retaing most of thier intrinsic properties.
 
-We will focus our attention on SVD decomposition and its performances. Given a matrix  X , the SVD decomposes it into the product of two unitary matrices,  V  and  U , and a rectangular diagonal matrix of singular values  S :
+# Comparing the results
+I used linear and non-linear activation function (ReLU).
 
-X=V⋅S⋅UT. 
+Loss: The shallow linear autoencoder achieved a lower training loss (0.00788673) compared to the shallow nonlinear autoencoder with ReLU activation (0.02394094). This indicates that the shallow linear autoencoder was able to reconstruct the input data more accurately during training.
 
-The SVD is already implemented in PyTorch as torch.linalg.svd. In our case, the  X  matrix will represent the training set, where each row is a sample (therefore the number of columns will be the number of input features). However, notice that the  X  matrix has a huge number of rows (we have 50,000 input samples) and only 784 columns. If you are using the Colab free plan, the quantity of available RAM may not be sufficient to compute the SVD of  X . Therefore, to ease memory consumption and numerical stability, we resort to one property of the SVD and compute its equivalent version from the matrix  C=XT⋅X , that can be decomposed as:
+Validation Loss: The shallow linear autoencoder also had a lower validation loss (0.01068598) compared to the shallow nonlinear autoencoder with ReLU activation (0.02381694). This suggests that the shallow linear autoencoder generalizes better to unseen data.
 
-C=U⋅S2⋅UT 
+Training Time: The training times for both models are similar, with the shallow linear autoencoder taking 1027.71 seconds and the shallow nonlinear autoencoder taking 1040.40 seconds.
 
-Since we need just the matrix  U  to compute the compressed version of our data, this trick turns out to be a quick and good solution.
+# Shallow Denoising Autoencoder
+The model architecture consisted of two encoding layers with 128 and 64 units, respectively, followed by two decoding layers with 64 and 128 units. The activation function used was ReLU. The learning rate was set to 0.001.
 
+For the noise levels tested, the chosen hyperparameter configuration worked well. The model achieved low validation losses and maintained good accuracy in denoising the data. However, it is worth noting that the performance of the model may vary with different noise levels.
+
+The training time for the model was approximately 1026 seconds, indicating that the shallow autoencoder was efficient in training.
